@@ -1,5 +1,4 @@
 #define WIN32_LEAN_AND_MEAN
-
 #include "IncludeFiles.h" // basic includes
 
 long CALLBACK WndProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam) {

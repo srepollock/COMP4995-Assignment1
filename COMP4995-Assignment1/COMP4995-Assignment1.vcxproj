@@ -153,6 +153,7 @@
     <ClCompile Include="basics.cpp" />
     <ClCompile Include="engine.cpp" />
     <ClCompile Include="Fonts.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="Globals.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
@@ -160,6 +161,7 @@
     <ClInclude Include="basics.h" />
     <ClInclude Include="engine.h" />
     <ClInclude Include="Fonts.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="IncludeFiles.h" />
   </ItemGroup>

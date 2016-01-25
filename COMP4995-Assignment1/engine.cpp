@@ -79,9 +79,7 @@ int Render() {
 		SetError(_T("Cannot render because there is no device"));
 		return E_FAIL;
 	}
-
 	g_pDevice->Clear(0, 0, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB(255, 0, 0, 55), 1.0f, 0);
-
 	r = ValidateDevice();
 	if (FAILED(r)) {
 		return E_FAIL;
@@ -90,21 +88,6 @@ int Render() {
 	if (FAILED(r)) {
 		SetError(_T("Couldn't get backbuffer"));
 	}
-
-	// This is deleted
-	/*
-	LPDIRECT3DSURFACE9 pSurface = 0;
-
-	r = LoadBitmapToSurface(_T("tiger.bmp"),
-		&pSurface, g_pDevice);
-	if (FAILED(r)) {
-		SetError(_T("could not load bitmap surface"));
-	}
-
-	r = D3DXLoadSurfaceFromSurface(g_pBackSurface, NULL, NULL, pSurface, NULL, NULL, D3DX_FILTER_TRIANGLE, 0);
-	if (FAILED(r))
-		SetError(_T("did not copy surface"));
-	*/
 												// NULL for fullscreen
 	r = g_pDevice->UpdateSurface(g_BitmapSurface, NULL, g_pBackSurface, NULL);
 	if (FAILED(r)) {
@@ -112,18 +95,15 @@ int Render() {
 	}
 
 	D3DLOCKED_RECT Locked;
-
 	g_pBackSurface->LockRect(&Locked, 0, 0);
-
 	PrintFrameRate(40, 50, TRUE, D3DCOLOR_ARGB(255, 255, 0, 255), (DWORD*)Locked.pBits, Locked.Pitch);
-
 	g_pBackSurface->UnlockRect();
-
+	
 	//Start to render in 3D
 	g_pDevice->BeginScene();
-
 	//finish rendering
 	g_pDevice->EndScene();
+	
 	//console work
 	g_pDevice->Present(NULL, NULL, NULL, NULL);//swap over buffer to primary surface
 	return S_OK;
