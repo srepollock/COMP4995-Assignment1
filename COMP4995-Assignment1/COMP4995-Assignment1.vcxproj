@@ -150,13 +150,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="FrameRate.cpp" />
+    <ClCompile Include="basics.cpp" />
+    <ClCompile Include="engine.cpp" />
+    <ClCompile Include="Fonts.cpp" />
+    <ClCompile Include="Globals.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="basics.h" />
+    <ClInclude Include="engine.h" />
     <ClInclude Include="Fonts.h" />
     <ClInclude Include="Globals.h" />
-    <ClInclude Include="Header.h" />
+    <ClInclude Include="IncludeFiles.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
