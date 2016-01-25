@@ -8,6 +8,7 @@
 extern LPDIRECT3D9 g_pD3D;//COM object
 extern LPDIRECT3DDEVICE9 g_pDevice;//graphics device
 extern PDIRECT3DSURFACE9 g_pBackSurface;//backbuffer
+extern PDIRECT3DSURFACE9 g_BitmapSurface;//surface for the bitmap
 extern HWND g_hWndMain;//handle to main window
 extern INT64 g_Frequency;//holds number of ticks per second
 extern INT64 g_FrameRate;//holds current frame rate calculated

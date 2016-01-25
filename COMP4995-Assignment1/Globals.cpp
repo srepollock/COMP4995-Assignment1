@@ -3,6 +3,7 @@
 LPDIRECT3D9 g_pD3D;//COM object
 LPDIRECT3DDEVICE9 g_pDevice;//graphics device
 LPDIRECT3DSURFACE9 g_pBackSurface = 0;//backbuffer
+PDIRECT3DSURFACE9 g_BitmapSurface = 0;//surface for the bitmap
 HWND g_hWndMain;//handle to main window
 INT64 g_Frequency = 0;//holds number of ticks per second
 INT64 g_FrameRate = 0;//holds current frame rate calculated

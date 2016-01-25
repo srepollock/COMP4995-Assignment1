@@ -2,18 +2,37 @@
 
 int GameInit() {
 	HRESULT r = 0;//return values
+	D3DSURFACE_DESC desc;
+	LPDIRECT3DSURFACE9 pSurface = 0;
 
 	g_pD3D = Direct3DCreate9(D3D_SDK_VERSION);//COM object
 	if (g_pD3D == NULL) {
 		SetError(_T("Could not create IDirect3D9 object"));
 		return E_FAIL;
 	}
-
-	r = InitDirect3DDevice(g_hWndMain, 640, 480, TRUE, D3DFMT_X8R8G8B8, g_pD3D, &g_pDevice);
+												// FALSE = full screen TRUE = windowed
+	r = InitDirect3DDevice(g_hWndMain, 640, 480, FALSE, D3DFMT_X8R8G8B8, g_pD3D, &g_pDevice);
 	if (FAILED(r)) {//FAILED is a macro that returns false if return value is a failure - safer than using value itself
 		SetError(_T("Initialization of the device failed"));
 		return E_FAIL;
 	}
+
+	// This is where I setup the surface
+	r = g_pDevice->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &pSurface);
+	if (FAILED(r)) {
+		SetError(_T("Couldn't get backbuffer"));
+	}
+	pSurface->GetDesc(&desc);
+
+	r = g_pDevice->CreateOffscreenPlainSurface(desc.Width, desc.Height, D3DFMT_X8R8G8B8, D3DPOOL_SYSTEMMEM, &g_BitmapSurface, NULL);
+
+	r = LoadBitmapToSurface(_T("tiger.bmp"), &pSurface, g_pDevice);
+	if (FAILED(r))
+		SetError(_T("Error loading bitmap"));
+
+	r = D3DXLoadSurfaceFromSurface(g_BitmapSurface, NULL, NULL, pSurface, NULL, NULL, D3DX_FILTER_TRIANGLE, 0);
+	if (FAILED(r))
+		SetError(_T("did not copy surface"));
 
 	LoadAlphabet(_T("Alphabet vSmall.bmp"), 8, 16);
 	InitTiming();
@@ -72,6 +91,8 @@ int Render() {
 		SetError(_T("Couldn't get backbuffer"));
 	}
 
+	// This is deleted
+	/*
 	LPDIRECT3DSURFACE9 pSurface = 0;
 
 	r = LoadBitmapToSurface(_T("tiger.bmp"),
@@ -83,12 +104,18 @@ int Render() {
 	r = D3DXLoadSurfaceFromSurface(g_pBackSurface, NULL, NULL, pSurface, NULL, NULL, D3DX_FILTER_TRIANGLE, 0);
 	if (FAILED(r))
 		SetError(_T("did not copy surface"));
+	*/
+												// NULL for fullscreen
+	r = g_pDevice->UpdateSurface(g_BitmapSurface, NULL, g_pBackSurface, NULL);
+	if (FAILED(r)) {
+		SetError(_T("Error setting surface to back surface"));
+	}
 
 	D3DLOCKED_RECT Locked;
 
 	g_pBackSurface->LockRect(&Locked, 0, 0);
 
-	PrintFrameRate(550, 400, TRUE, D3DCOLOR_ARGB(255, 255, 0, 255), (DWORD*)Locked.pBits, Locked.Pitch);
+	PrintFrameRate(40, 50, TRUE, D3DCOLOR_ARGB(255, 255, 0, 255), (DWORD*)Locked.pBits, Locked.Pitch);
 
 	g_pBackSurface->UnlockRect();
 
