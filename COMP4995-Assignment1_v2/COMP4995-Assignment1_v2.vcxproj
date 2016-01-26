@@ -19,9 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{C81FB9AA-56A3-4126-A021-0ADE5F4CCDB5}</ProjectGuid>
+    <ProjectGuid>{4F0B3E67-73AF-4CB6-9DBD-76CF2C8DC0FF}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>COMP4995Assignment1</RootNamespace>
+    <RootNamespace>COMP4995Assignment1_v2</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -151,19 +151,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="basics.cpp" />
-    <ClCompile Include="engine.cpp" />
-    <ClCompile Include="Fonts.cpp" />
+    <ClCompile Include="Draw.cpp" />
+    <ClCompile Include="Frame.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="Globals.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="basics.h" />
-    <ClInclude Include="engine.h" />
-    <ClInclude Include="Fonts.h" />
+    <ClInclude Include="Draw.h" />
+    <ClInclude Include="Frame.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="Globals.h" />
-    <ClInclude Include="IncludeFiles.h" />
+    <ClInclude Include="Includes.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

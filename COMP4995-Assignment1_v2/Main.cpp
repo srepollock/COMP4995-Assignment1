@@ -1,8 +1,11 @@
-#define WIN32_LEAN_AND_MEAN
-#include "IncludeFiles.h" // basic includes
+#include "Includes.h"
+
+Game g;
 
 long CALLBACK WndProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam) {
-
+	D3DLOCKED_RECT rect;
+	DWORD* pData;
+	POINT pS, pE;
 	switch (uMessage) {
 	case WM_CREATE:
 	{
@@ -20,6 +23,17 @@ long CALLBACK WndProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam) {
 		}
 		return 0;
 	}
+	case WM_LBUTTONDOWN:
+		GetCursorPos(&pS);
+		g.d.setPStart(pS);
+		return 0;
+	case WM_MOUSEMOVE:
+		if (wParam == MK_LBUTTON) {
+			// holding down the left button
+			GetCursorPos(&pE);
+			g.d.setPEnd(pE);
+		}
+		return 0;
 	case WM_DESTROY:
 	{
 		PostQuitMessage(0);
@@ -60,24 +74,26 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pstrCmdLin
 		WS_OVERLAPPEDWINDOW,
 		CW_USEDEFAULT,
 		CW_USEDEFAULT,
-		512, 512,
+		SCREEN_WIDTH,
+		SCREEN_HEIGHT,
 		NULL,
 		NULL,
 		hInstance,
 		NULL);
 
-	g_hWndMain = hWnd;//set our global window handle
+	//g_hWndMain = hWnd;//set our global window handle
+	// FRAME HAS NOT BEEN SETUP!!!
+	g = Game(hWnd);
 
 	ShowWindow(hWnd, iCmdShow);
 	UpdateWindow(hWnd);
 
-	if (FAILED(GameInit())) {
-		;//initialize Game
+	if (FAILED(g.GameInit())) {
+		//initialize Game
 		SetError(_T("Initialization Failed"));
-		GameShutdown();
+		g.GameShutdown();
 		return E_FAIL;
 	}
-
 
 	while (TRUE) {
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
@@ -87,9 +103,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pstrCmdLin
 			DispatchMessage(&msg);
 		}
 		else {
-			GameLoop();
+			g.GameLoop();
 		}
 	}
-	GameShutdown();// clean up the game
+	g.GameShutdown();// clean up the game
 	return msg.wParam;
 }
