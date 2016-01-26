@@ -4,13 +4,9 @@
 #include <windows.h>
 #include <tchar.h>
 #include <stdio.h>
-//#include <d3dcsx.h>
-//#include <D3d10shader.h>
 
 #pragma comment(lib,"d3dx9.lib")
 #pragma comment(lib,"d3d9")
-#include <stdio.h>
-#include <d3d10.h>
 #include <d3d9.h>
 #include <d3dx9.h>
 #include <d3dx9tex.h>
