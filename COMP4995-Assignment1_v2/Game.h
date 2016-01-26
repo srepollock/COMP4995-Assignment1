@@ -16,6 +16,10 @@ public:
 	Game();
 	Game(HWND);
 	~Game();
+	static LRESULT CALLBACK StaticWndProc(HWND, UINT, WPARAM, LPARAM);
+	LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
+	void setHandle(HWND);
+	HWND getHandle();
 	int GameInit();
 	int GameLoop();
 	int GameShutdown();

@@ -1,18 +1,90 @@
 #include "Includes.h"
 
+// Default constructor for the game object
 Game::Game() {
 	d = Draw();
 }
 
+// Constructor for the game object with a handle to the main window
 Game::Game(HWND hWnd) {
 	this->hWndMain = hWnd;
 	d = Draw();
 }
 
+// Default destructor for the game object
 Game::~Game() {
 
 }
 
+// Sets the handle
+void Game::setHandle(HWND hWnd) {
+	hWndMain = hWnd;
+}
+
+// Gets the handle
+HWND Game::getHandle() {
+	return hWndMain;
+}
+
+// Static WndProc to be used when initializing. This will setup the class to call
+// the regular WndProc
+LRESULT CALLBACK Game::StaticWndProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam) {
+	Game* ptr;
+	ptr = (Game*)GetWindowLongPtr(hWnd, GWL_USERDATA);
+	if (ptr != nullptr) {
+		return ptr->WndProc(hWnd, uMessage, wParam, lParam);
+	}
+	else {
+		return DefWindowProc(hWnd, uMessage, wParam, lParam);
+	}
+}
+
+// Windows Proc for the window
+LRESULT CALLBACK Game::WndProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam) {
+	D3DLOCKED_RECT rect;
+	DWORD* pData;
+	POINT pS, pE;
+	switch (uMessage) {
+	case WM_CREATE: {
+		return 0;
+	}
+	case WM_PAINT:{
+		ValidateRect(hWnd, NULL);//basically saying - yeah we took care of any paint msg without any overhead
+		return 0;
+	}
+	case WM_CHAR: {
+		if (wParam == VK_ESCAPE)
+		{
+			SendMessage(hWnd, WM_DESTROY, NULL, NULL);
+		}
+		return 0;
+	}
+	case WM_LBUTTONDOWN:
+		GetCursorPos(&pS);
+		d.setPStart(pS);
+		d.setPEnd(pS);
+		return 0;
+	case WM_MOUSEMOVE:
+		if (wParam == MK_LBUTTON) {
+			// holding down the left button
+			GetCursorPos(&pE);
+			d.setPEnd(pE);
+		}
+		return 0;
+	case WM_DESTROY:
+	{
+		PostQuitMessage(0);
+		return 0;
+	}
+	default:
+	{
+		return DefWindowProc(hWnd, uMessage, wParam, lParam);
+	}
+	}
+}
+
+// Game initialization. This will setup the directx defice and window
+// Loads in the alphabet for the frame counter
 int Game::GameInit() {
 	HRESULT r = 0;//return values
 	D3DSURFACE_DESC desc;
@@ -24,7 +96,7 @@ int Game::GameInit() {
 		return E_FAIL;
 	}
 												  // FALSE = full screen TRUE = windowed
-	r = InitDirect3DDevice(this->hWndMain, 640, 480, FALSE, D3DFMT_X8R8G8B8, this->pD3D, &this->pDevice);
+	r = InitDirect3DDevice(this->hWndMain, SCREEN_WIDTH, SCREEN_HEIGHT, FALSE, D3DFMT_X8R8G8B8, this->pD3D, &this->pDevice);
 	if (FAILED(r)) {//FAILED is a macro that returns false if return value is a failure - safer than using value itself
 		SetError(_T("Initialization of the device failed"));
 		return E_FAIL;
@@ -55,6 +127,7 @@ int Game::GameInit() {
 	return S_OK;
 }
 
+// Game loop for the directx counter, and gets the updated frame count to render fps
 int Game::GameLoop() {
 	frameController.FrameCount();
 	this->Render();
@@ -65,6 +138,7 @@ int Game::GameLoop() {
 	return S_OK;
 }
 
+// Shutsdown the game and releases the device back to windows
 int Game::GameShutdown() {
 
 	frameController.UnloadAlphabet();
@@ -83,6 +157,8 @@ int Game::GameShutdown() {
 	return S_OK;
 }
 
+// Loads bitmap from memory to the surface.
+// IMAGE_BITMAP is defined in basics for ease of change
 int Game::LoadBitmapToSurface(TCHAR* PathName, LPDIRECT3DSURFACE9* ppSurface, LPDIRECT3DDEVICE9 pDevice) {
 	HRESULT r;
 	HBITMAP hBitmap;
@@ -114,6 +190,7 @@ int Game::LoadBitmapToSurface(TCHAR* PathName, LPDIRECT3DSURFACE9* ppSurface, LP
 	return S_OK;
 }
 
+// Initializes the directx device and sets up buffers
 int Game::InitDirect3DDevice(HWND hWndTarget, int Width, int Height, BOOL bWindowed, D3DFORMAT FullScreenFormat, LPDIRECT3D9 pD3D, LPDIRECT3DDEVICE9* ppDevice) {
 	D3DPRESENT_PARAMETERS d3dpp;//rendering info
 	D3DDISPLAYMODE d3ddm;//current display mode info
@@ -157,6 +234,9 @@ int Game::InitDirect3DDevice(HWND hWndTarget, int Width, int Height, BOOL bWindo
 	return S_OK;
 }
 
+// Updates the device's surface. This is called each time the game loops run and gets the surface
+// currently stored on the back surface buffer, then will start loading the back surface buffer
+// before finishing
 int Game::Render() {
 	HRESULT r;
 	this->pBackSurface = 0;
@@ -199,6 +279,7 @@ int Game::Render() {
 	return S_OK;
 }
 
+// Validates that the device has been setup and is useable
 HRESULT Game::ValidateDevice() {
 	HRESULT r = 0;
 	//Test current state of device
@@ -233,6 +314,7 @@ HRESULT Game::ValidateDevice() {
 	return S_OK;
 }
 
+// Returns an ok message
 HRESULT Game::RestoreGraphics() {
 	return S_OK;
 }

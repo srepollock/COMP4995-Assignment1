@@ -1,5 +1,6 @@
 #include "Includes.h"
 
+// Outputs an error to the command line based on the input
 void SetError(TCHAR* szFormat, ...) {
 	TCHAR szBuffer[1024];
 	va_list pArgList;
@@ -14,6 +15,7 @@ void SetError(TCHAR* szFormat, ...) {
 	OutputDebugString(_T("\n"));
 }
 
+// Returns that the graphcis were ok
 HRESULT RestoreGraphics() {
 	return S_OK;
 }

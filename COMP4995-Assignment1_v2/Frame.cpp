@@ -1,19 +1,21 @@
 #include "Includes.h"
 
+// Default constructor
 Frame::Frame() {
 
 }
 
+// Constructor that sets up the device
 Frame::Frame(LPDIRECT3DDEVICE9 dev){
 	this->pDevice = dev;
 }
 
-// overload operator?
-
+// Default destructor
 Frame::~Frame(){
 
 }
 
+// Gets the frame count currently
 void Frame::FrameCount() {
 	INT64 NewCount = 0;
 	static INT64 LastCount = 0;
@@ -35,6 +37,7 @@ void Frame::FrameCount() {
 	}
 }
 
+// Sets up the timer for the frame count
 HRESULT Frame::InitTiming() {
 	QueryPerformanceFrequency((LARGE_INTEGER*)&this->frequency);
 	if (this->frequency == 0) {
@@ -44,19 +47,24 @@ HRESULT Frame::InitTiming() {
 	return S_OK;
 }
 
+// Increases the frame count
 void Frame::incFrame_Counter() {
 	this->frame_counter++;
 }
 
+// Sets the frame counter
 void Frame::setFrame_Counter(int n) {
 	this->frame_counter = n;
 }
+// Gets the frame counter
 int Frame::getFrame_Counter() {
 	return frame_counter;
 }
+// Sets the frame rate
 void Frame::setFrameRate(int n) {
 	this->FrameRate = n;
 }
+// Sets the frequency
 void Frame::setFrequency(int n) {
 	this->frequency = n;
 }
@@ -217,6 +225,7 @@ void Frame::PrintChar(int x, int y, char Character, BOOL bTransparent, D3DCOLOR 
 
 }
 
+// Printes a string
 void Frame::PrintString(int x, int y, char* String, BOOL bTransparent, D3DCOLOR ColorKey, DWORD* pDestData, int DestPitch) {
 	// Loop for each character in the string
 	for (UINT i = 0; i < strlen(String); i++)
@@ -241,6 +250,7 @@ void Frame::PrintFrameRate(int x, int y, BOOL bTransparent, D3DCOLOR ColorKey, D
 	PrintString(x, y, string, TRUE, D3DCOLOR_ARGB(255, 255, 0, 255), pDestData, DestPitch);
 }
 
+// Loads the bitmap to the front surface from the buffer
 int Frame::LoadBitmapToSurface(TCHAR* PathName, LPDIRECT3DSURFACE9* ppSurface, LPDIRECT3DDEVICE9 pDevice) {
 	HRESULT r;
 	HBITMAP hBitmap;
