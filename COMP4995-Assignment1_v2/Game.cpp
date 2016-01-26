@@ -23,7 +23,7 @@ int Game::GameInit() {
 		SetError(_T("Could not create IDirect3D9 object"));
 		return E_FAIL;
 	}
-	// FALSE = full screen TRUE = windowed
+												  // FALSE = full screen TRUE = windowed
 	r = InitDirect3DDevice(this->hWndMain, 640, 480, FALSE, D3DFMT_X8R8G8B8, this->pD3D, &this->pDevice);
 	if (FAILED(r)) {//FAILED is a macro that returns false if return value is a failure - safer than using value itself
 		SetError(_T("Initialization of the device failed"));
@@ -39,7 +39,7 @@ int Game::GameInit() {
 
 	r = this->pDevice->CreateOffscreenPlainSurface(desc.Width, desc.Height, D3DFMT_X8R8G8B8, D3DPOOL_SYSTEMMEM, &this->BitmapSurface, NULL);
 
-	r = LoadBitmapToSurface(_T("tiger.bmp"), &pSurface, this->pDevice);
+	r = LoadBitmapToSurface(_T(BITMAP_PICTURE), &pSurface, this->pDevice);
 	if (FAILED(r))
 		SetError(_T("Error loading bitmap"));
 
